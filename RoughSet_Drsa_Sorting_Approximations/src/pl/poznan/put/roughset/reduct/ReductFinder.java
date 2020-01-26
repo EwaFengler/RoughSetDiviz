@@ -53,37 +53,37 @@ public class ReductFinder {
     }
 
     private boolean isReduct(CriteriaIndicesMask indicesMask) {
+        ConeByCriteriaFinder coneFinder = new ConeByCriteriaFinder(alternatives, indicesMask);
+
+        for (int i = 0; i < roughSetClasses.size() - 1; i++){
+            ClassUnion currentUnion = roughSetClasses.get(i).getDownwardUnion();
+            ClassUnion oppositeUnion = roughSetClasses.get(i+1).getUpwardUnion();
+
+            for (Alternative alternative : currentUnion.getLowerApprox()) {
+                Set<Alternative> newCone = coneFinder.getNegativeDominance(alternative);
+                Set<Alternative> oldCone = alternative.getNegativeDominance();
+                if (hasQualityChanged(currentUnion, oppositeUnion, newCone, oldCone)) return false;
+            }
+        }
+
         for (int i = 1; i < roughSetClasses.size(); i++) {
-            for (Alternative alternative : getLowerApproxOfUpperUnion(i)) {
-                Set<Alternative> newCone = getNewCone(indicesMask, alternative);
-                if (hasConeChanged(alternative, newCone)) {
-                    if (!isStillConsistent(i, newCone)) {
-                        return false;
-                    }
-                }
+            ClassUnion currentUnion = roughSetClasses.get(i).getUpwardUnion();
+            ClassUnion oppositeUnion = roughSetClasses.get(i - 1).getDownwardUnion();
+
+            for (Alternative alternative : currentUnion.getLowerApprox()) {
+                Set<Alternative> newCone = coneFinder.getPositiveDominance(alternative);
+                Set<Alternative> oldCone = alternative.getPositiveDominance();
+                if (hasQualityChanged(currentUnion, oppositeUnion, newCone, oldCone)) return false;
             }
         }
         return true;
     }
 
-    private Set<Alternative> getLowerApproxOfUpperUnion(int i) {
-        return roughSetClasses.get(i).getUpwardUnion().getLowerApprox();
-    }
-
-    private Set<Alternative> getNewCone(CriteriaIndicesMask indicesMask, Alternative alternative) {
-        PositiveConeByCriteriaFinder coneFinder = new PositiveConeByCriteriaFinder(alternatives, indicesMask);
-        return coneFinder.getPositiveDominance(alternative);
-    }
-
-    private boolean hasConeChanged(Alternative alternative, Set<Alternative> newCone) {
-        Set<Alternative> oldCone = alternative.getPositiveDominance();
-        return oldCone.size() != newCone.size();
-    }
-
-    private boolean isStillConsistent(int i, Set<Alternative> newCone) {
-        ClassUnion currentUnion = roughSetClasses.get(i).getUpwardUnion();
-        ClassUnion oppositeUnion = roughSetClasses.get(i - 1).getDownwardUnion();
-        return consistencyMeasure.checkIfConsistent(newCone, currentUnion, oppositeUnion);
+    private boolean hasQualityChanged(ClassUnion currentUnion, ClassUnion oppositeUnion, Set<Alternative> newCone, Set<Alternative> oldCone) {
+        if (oldCone.size() != newCone.size()) {
+            return !consistencyMeasure.checkIfConsistent(newCone, currentUnion, oppositeUnion);
+        }
+        return false;
     }
 
     private CriteriaIndicesMask convertToMask(int i) {

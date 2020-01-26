@@ -18,8 +18,8 @@ public class Sorting {
     private List<Alternative> alternatives;
     private List<RoughSetClass> roughSetClasses;
     private ConsistencyMeasure consistencyMeasure;
-    private int qualityOfApproxNominator = 0;
-    private int qualityOfApproxDenominator = 0;
+    private int alternativesInLower = 0;
+    private int alternativesInUpper = 0;
 
     public Sorting(List<Criterion> criteria, List<Alternative> alternatives, List<RoughSetClass> roughSetClasses, ConsistencyMeasure consistencyMeasure) {
         this.criteria = criteria;
@@ -34,7 +34,7 @@ public class Sorting {
         populateUnions();
         produceApproximations();
         List<Reduct> reducts = findReducts();
-        double qualityOfApprox = qualityOfApproxNominator / (qualityOfApproxDenominator * 1.0);
+        double qualityOfApprox = 1.0 - (alternativesInUpper - alternativesInLower) / (alternatives.size() * 1.0);
 
         return new SortingResult(alternatives, roughSetClasses, reducts, qualityOfApprox);
     }
@@ -136,10 +136,10 @@ public class Sorting {
 
             if (consistencyMeasure.checkIfConsistent(alternative.getNegativeDominance(), downwardUnion, next.getUpwardUnion())) {
                 downwardUnion.addAllToLowerApprox(alternative.getNegativeDominance());
-                qualityOfApproxNominator++;
+                alternativesInLower++;
             }
         }
-        qualityOfApproxDenominator += downwardUnion.getAlternatives().size();
+        alternativesInUpper += downwardUnion.getAlternatives().size();
     }
 
     private void produceUpwardUnionApproximations(RoughSetClass prev, RoughSetClass current) {
@@ -150,10 +150,10 @@ public class Sorting {
 
             if (consistencyMeasure.checkIfConsistent(alternative.getPositiveDominance(), upwardUnion, prev.getDownwardUnion())) {
                 upwardUnion.addAllToLowerApprox(alternative.getPositiveDominance());
-                qualityOfApproxNominator++;
+                alternativesInLower++;
             }
         }
-        qualityOfApproxDenominator += upwardUnion.getAlternatives().size();
+        alternativesInUpper += upwardUnion.getAlternatives().size();
     }
 
     private List<Alternative> getNotWorseAlternatives(int k) {

@@ -11,6 +11,7 @@ import java.io.File;
 import java.util.Map;
 
 public class RoughSet_Drsa_Sorting_ApproximationsCLI_XMCDAv2 {
+
     public static void main(String[] args) throws Utils.InvalidCommandLineException {
         final Utils.Arguments params = Utils.parseCmdLineArguments(args);
 
@@ -38,7 +39,6 @@ public class RoughSet_Drsa_Sorting_ApproximationsCLI_XMCDAv2 {
             Utils.writeProgramExecutionResultsAndExit(prgExecResults, executionResult, Utils.XMCDA_VERSION.v2);
             return;
         }
-
 
         Sorting sorting = InputsHandler.checkAndExtractInputs(xmcda, executionResult);
 

@@ -11,7 +11,6 @@ import java.util.Map;
 public class RoughSet_Drsa_Sorting_ApproximationsCLI_XMCDAv3 {
 
     public static void main(String[] args) throws Utils.InvalidCommandLineException {
-
         final Utils.Arguments params = Utils.parseCmdLineArguments(args);
 
         final String indir = params.inputDirectory;

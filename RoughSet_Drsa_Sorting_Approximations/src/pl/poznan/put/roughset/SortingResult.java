@@ -52,8 +52,8 @@ public class SortingResult {
         return approximations;
     }
 
-    public CriteriaSets<NA> getXmcdaReducts() {
-        CriteriaSets<NA> criteriaSets = new CriteriaSets<>();
+    public CriteriaSets<Object> getXmcdaReducts() {
+        CriteriaSets<Object> criteriaSets = new CriteriaSets<>();
         reducts.forEach(r -> criteriaSets.add(buildXmcdaCriteriaSet(r)));
         return criteriaSets;
     }
@@ -139,30 +139,17 @@ public class SortingResult {
         return approx;
     }
 
-    private CriteriaSet<NA> buildXmcdaCriteriaSet(Reduct reduct) {
-        CriteriaSet<NA> criteriaSet = new CriteriaSet<>();
+    private CriteriaSet<Object> buildXmcdaCriteriaSet(Reduct reduct) {
+        CriteriaSet<Object> criteriaSet = new CriteriaSet<>();
         criteriaSet.setId(reduct.toString());
         addCriteria(reduct, criteriaSet);
         return criteriaSet;
     }
 
-    private void addCriteria(Reduct reduct, CriteriaSet<NA> criteriaSet) {
+    private void addCriteria(Reduct reduct, CriteriaSet<Object> criteriaSet) {
         for (Criterion criterion : reduct.getCriteria()) {
-            criteriaSet.put(new org.xmcda.Criterion(criterion.getId()), buildXmcdaNaQualifiedValues());
+            criteriaSet.put(new org.xmcda.Criterion(criterion.getId()), null);
         }
-    }
-
-    private QualifiedValues<NA> buildXmcdaNaQualifiedValues() {
-        QualifiedValues<NA> qualifiedValues = new QualifiedValues<>();
-        QualifiedValue<NA> qualifiedValue = buildXmcdaNaQualifiedValue();
-        qualifiedValues.add(qualifiedValue);
-        return qualifiedValues;
-    }
-
-    private QualifiedValue<NA> buildXmcdaNaQualifiedValue() {
-        QualifiedValue<NA> qualifiedValue = new QualifiedValue<>();
-        qualifiedValue.setValue(NA.na);
-        return qualifiedValue;
     }
 
     private ProgramParameter<Double> buildXmcdaProgramParameter() {
@@ -193,7 +180,7 @@ public class SortingResult {
     private void addAlternatives(Set<Alternative> approxAsSet, AlternativesSet<Object> approxAlternatives) {
         for (Alternative alternative : approxAsSet) {
             org.xmcda.Alternative xmcdaAlternative = new org.xmcda.Alternative(alternative.getId());
-            approxAlternatives.put(xmcdaAlternative, null); //TODO co z nullem?
+            approxAlternatives.put(xmcdaAlternative, null);
         }
     }
 }

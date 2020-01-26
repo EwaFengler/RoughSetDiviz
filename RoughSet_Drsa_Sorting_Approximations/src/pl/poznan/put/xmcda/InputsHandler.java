@@ -19,7 +19,6 @@ public class InputsHandler {
     }
 
     private static void checkInputs(XMCDA xmcda, ProgramExecutionResult errors) {
-
         checkPerformanceTable(xmcda, errors);
         checkAlternatives(xmcda, errors);
         checkCriteria(xmcda, errors);
