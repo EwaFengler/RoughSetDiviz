@@ -84,7 +84,7 @@ public class RoughSet_Drsa_Ranking_ApproximationsCLI_XMCDAv2 {
                 executionResult, "alternativesComparisons");
         Utils.loadXMCDAv2(xmcda, new File(indir, "criteria.xml"), true,
                 executionResult, "criteria");
-        Utils.loadXMCDAv2(xmcda, new File(indir, "performanceTable.xml"), true,
+        Utils.loadXMCDAv2(xmcda, new File(indir, "performance_table.xml"), true,
                 executionResult, "performanceTable");
         Utils.loadXMCDAv2(xmcda, new File(indir, "parameters.xml"), true,
                 executionResult, "methodParameters");

@@ -10,7 +10,7 @@ public class Reduct {
     CriteriaIndicesMask critIndMask;
     List<Criterion> criteria;
 
-    public Reduct(CriteriaIndicesMask critIndMask, List<Criterion> allCriteria) {
+    public Reduct(CriteriaIndicesMask critIndMask, List<Criterion> criteria) {
         this.critIndMask = critIndMask;
         this.criteria = collectCriteria(critIndMask, criteria);
     }
@@ -27,7 +27,7 @@ public class Reduct {
 
     @Override
     public String toString() {
-        List<String> names = this.criteria.stream().map(Criterion::getName).collect(Collectors.toList());
-        return String.join("+", names);
+        List<String> ids = this.criteria.stream().map(Criterion::getId).collect(Collectors.toList());
+        return String.join("+", ids);
     }
 }

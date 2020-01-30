@@ -56,7 +56,7 @@ public class ReductFinder {
     }
 
     private boolean isReduct(CriteriaIndicesMask indicesMask) {
-        PositiveConeByCriteriaFinder coneFinder = new PositiveConeByCriteriaFinder(alternativePairs, indicesMask);
+        ConeByCriteriaFinder coneFinder = new ConeByCriteriaFinder(alternativePairs, indicesMask);
 
         for (AlternativePair alternativePair : s.getLowerApprox()) {
             Set<AlternativePair> oldCone = alternativePair.getPositiveDominance();
@@ -69,6 +69,16 @@ public class ReductFinder {
             }
         }
 
+        for (AlternativePair alternativePair : sc.getLowerApprox()) {
+            Set<AlternativePair> oldCone = alternativePair.getNegativeDominance();
+            Set<AlternativePair> newCone = coneFinder.getNegativeDominance(alternativePair);
+
+            if (oldCone.size() != newCone.size()) {
+                if (!consistencyMeasure.checkIfConsistent(newCone, sc, s)) {
+                    return false;
+                }
+            }
+        }
         return true;
     }
 

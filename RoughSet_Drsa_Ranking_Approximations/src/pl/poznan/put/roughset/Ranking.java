@@ -31,7 +31,7 @@ public class Ranking {
         populateDominanceCones();
         populateApproximations();
         List<Reduct> reducts = getReducts();
-        qualityOfApprox = 1; //TODO
+        qualityOfApprox = (s.getLowerApprox().size() + sc.getLowerApprox().size()) / (alternativePairs.size() * 1.0);
 
         return new RankingResult(alternativePairs, s, sc, reducts, qualityOfApprox);
     }
@@ -84,5 +84,4 @@ public class Ranking {
         ReductFinder reductFinder = new ReductFinder(alternativePairs, s, sc, consistencyMeasure, criteria);
         return reductFinder.findReducts();
     }
-
 }
