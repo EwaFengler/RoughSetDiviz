@@ -1,7 +1,6 @@
 package pl.poznan.put.roughset;
 
 import org.xmcda.*;
-import org.xmcda.value.NA;
 import pl.poznan.put.roughset.alternative.Alternative;
 import pl.poznan.put.roughset.alternative.IndiscernibilityClass;
 import pl.poznan.put.roughset.attribute.Attribute;
@@ -58,8 +57,8 @@ public class ClassificationResult {
         return approximations;
     }
 
-    public CriteriaSets<NA> getXmcdaReducts() {
-        CriteriaSets<NA> criteriaSets = new CriteriaSets<>();
+    public CriteriaSets<Object> getXmcdaReducts() {
+        CriteriaSets<Object> criteriaSets = new CriteriaSets<>();
         reducts.forEach(r -> criteriaSets.add(buildXmcdaCriteriaSet(r)));
         return criteriaSets;
     }
@@ -115,30 +114,17 @@ public class ClassificationResult {
         return decision;
     }
 
-    private CriteriaSet<NA> buildXmcdaCriteriaSet(Reduct reduct) {
-        CriteriaSet<NA> criteriaSet = new CriteriaSet<>();
-        criteriaSet.setId(reduct.toString());
-        addCriteria(reduct, criteriaSet);
-        return criteriaSet;
-    }
-
-    private void addCriteria(Reduct reduct, CriteriaSet<NA> criteriaSet) {
+    private void addCriteria(Reduct reduct, CriteriaSet<?> criteriaSet) {
         for (Attribute attribute : reduct.getAttributes()) {
-            criteriaSet.put(new Criterion(attribute.getId()), buildXmcdaNaQualifiedValues());
+            criteriaSet.put(new Criterion(attribute.getId()), null);
         }
     }
 
-    private QualifiedValues<NA> buildXmcdaNaQualifiedValues() {
-        QualifiedValues<NA> qualifiedValues = new QualifiedValues<>();
-        QualifiedValue<NA> qualifiedValue = buildXmcdaNaQualifiedValue();
-        qualifiedValues.add(qualifiedValue);
-        return qualifiedValues;
-    }
-
-    private QualifiedValue<NA> buildXmcdaNaQualifiedValue() {
-        QualifiedValue<NA> qualifiedValue = new QualifiedValue<>();
-        qualifiedValue.setValue(NA.na);
-        return qualifiedValue;
+    private CriteriaSet<Object> buildXmcdaCriteriaSet(Reduct reduct) {
+        CriteriaSet<Object> criteriaSet = new CriteriaSet<>();
+        criteriaSet.setId(reduct.toString());
+        addCriteria(reduct, criteriaSet);
+        return criteriaSet;
     }
 
     private ProgramParameter<Double> buildXmcdaProgramParameter() {

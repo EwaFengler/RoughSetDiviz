@@ -27,7 +27,7 @@ public class Reduct {
 
     @Override
     public String toString() {
-        List<String> names = this.attributes.stream().map(Attribute::getName).collect(Collectors.toList());
-        return String.join("+", names);
+        List<String> ids = this.attributes.stream().map(Attribute::getId).collect(Collectors.toList());
+        return String.join("+", ids);
     }
 }
